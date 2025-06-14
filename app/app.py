@@ -10,35 +10,26 @@ import joblib
 # =========================
 st.markdown("""
     <style>
-        /* Global background */
         .stApp {
             background-color: #f4f6f8;
             font-family: 'Segoe UI', sans-serif;
         }
-
-        /* Sidebar */
         section[data-testid="stSidebar"] {
             background-color: #ffffff;
             border-right: 1px solid #dee2e6;
             padding: 2rem 1rem;
         }
-
-        /* Main title */
         h1 {
             text-align: center;
             color: #2c3e50;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
         }
-
-        /* Description text */
         .stMarkdown {
             text-align: center;
             font-size: 1.1rem;
             color: #5c636a;
         }
-
-        /* Predict button */
         .stButton>button {
             background-color: #0069d9;
             color: white;
@@ -48,19 +39,14 @@ st.markdown("""
             font-size: 1rem;
             transition: 0.3s;
         }
-
         .stButton>button:hover {
             background-color: #0053aa;
         }
-
-        /* Success text */
         .stAlert-success {
             background-color: #d1e7dd;
             border: 1px solid #badbcc;
             color: #0f5132;
         }
-
-        /* Sliders label text */
         .stSlider label {
             font-weight: bold;
             color: #333333;
@@ -71,8 +57,8 @@ st.markdown("""
 # =========================
 # ✅ Load model and columns
 # =========================
-model = joblib.load("price_model.pkl")
-model_columns = joblib.load("model_columns.pkl")
+model = joblib.load("../models/price_model.pkl")
+model_columns = joblib.load("../models/model_columns.pkl")
 
 # =========================
 # ✅ Title & Info
@@ -114,19 +100,17 @@ input_data = {
     'room_type_Shared room': 0
 }
 
-# Apply one-hot encoding manually
 if neighbourhood_group != 'Bronx':
     input_data[f'neighbourhood_group_{neighbourhood_group}'] = 1
 
 if room_type != 'Entire home/apt':
     input_data[f'room_type_{room_type}'] = 1
 
-# Create DataFrame with model columns
 input_df = pd.DataFrame([input_data], columns=model_columns)
-input_df = input_df.fillna(0)  # avoid NaN issues
+input_df = input_df.fillna(0)
 
 # =========================
-# Prediction Output
+# ✅ Prediction Output
 # =========================
 if st.button("Predict Price 💰"):
     prediction = model.predict(input_df)[0]
